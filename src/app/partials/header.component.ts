@@ -1,140 +1,216 @@
-import { Component, OnInit } from '@angular/core';
+import {
+    AfterViewInit,
+    Component,
+    Input,
+    OnChanges,
+    OnInit,
+    ViewChild,
+} from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs';
+import { CartService } from '../cart.service';
 
 @Component({
     selector: 'app-header',
     template: `
-<header>
-  <div class="header">
-    <div class="secondary-header">
-      <div class="main-container">
-          <div class="s-h-inner">
-              <div class="header-location">
-                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 297 297" style="enable-background:new 0 0 297 297;" xml:space="preserve">
-                      <g>
-                          <path d="M148.5,0C87.43,0,37.747,49.703,37.747,110.797c0,91.026,99.729,179.905,103.976,183.645   c1.936,1.705,4.356,2.559,6.777,2.559c2.421,0,4.841-0.853,6.778-2.559c4.245-3.739,103.975-92.618,103.975-183.645   C259.253,49.703,209.57,0,148.5,0z M148.5,272.689c-22.049-21.366-90.243-93.029-90.243-161.892   c0-49.784,40.483-90.287,90.243-90.287s90.243,40.503,90.243,90.287C238.743,179.659,170.549,251.322,148.5,272.689z"/>
-                          <path d="M148.5,59.183c-28.273,0-51.274,23.154-51.274,51.614c0,28.461,23.001,51.614,51.274,51.614   c28.273,0,51.274-23.153,51.274-51.614C199.774,82.337,176.773,59.183,148.5,59.183z M148.5,141.901   c-16.964,0-30.765-13.953-30.765-31.104c0-17.15,13.801-31.104,30.765-31.104c16.964,0,30.765,13.953,30.765,31.104   C179.265,127.948,165.464,141.901,148.5,141.901z"/>
-                      </g>
+        <header>
+            <div
+                class="header transition-all shadow-2xl bg-gradient-to-r from-[#2b2a2a38] via-[#00000044] to-[#00000048] "
+                id="main-nav "
+            >
+                <mat-toolbar>
+                    <div class="main-container">
+                        <div class="m-h-inner flex flex-wrap ">
+                            <div class="logo w-fit">
+                                <a href="/" class="text-[50px] ">Amber Eats</a>
+                            </div>
+                            <div class="navigation">
+                                <!-- <button
+                                    mat-button
+                                    class="no-hover-effect"
+                                    routerLink="/"
+                                >
+                                    Home
+                                </button> -->
+                               
+                                <button
+                                    mat-button
+                                    class="no-hover-effect"
+                                    routerLink="/menu"
+                                >
+                                    Menu
+                                </button>
+                                <button
+                                    mat-button
+                                    class="no-hover-effect"
+                                    routerLink="/gallery"
+                                >
+                                    Gallery
+                                </button>
+                                <button mat-button
+                                    class="no-hover-effect"
+                                    routerLink="/aboutus">
+                                    About
+                                </button>
+                                <button
+                                    mat-button
+                                    class="no-hover-effect"
+                                    routerLink="/about"
+                                >
+                                    Contact Us
+                                </button>
 
-                      </svg>
-                  <span>Kingston & St. Andrew</span>
-              </div>
-          </div>
-      </div>
-  </div>
-    <mat-toolbar>
-      <div class="main-container">
-        <div class="m-h-inner">
-          <div class="logo">
-            <a href="/"><span>Amber Eateries</span></a>
-          </div>
-          <div class="navigation">
-            <button mat-button routerLink="/">Home</button>
-            <button mat-button routerLink="/menu">Menus</button>
-            <button mat-button routerLink="/about">About</button>
-            <button mat-button routerLink="/addproduct">Add New Product</button>
-          </div>
-        </div>
-      </div>
-
-
-    </mat-toolbar>
-  </div>
-
-</header>
-  `,
+                                <button
+                                    mat-button
+                                    class="no-hover-effect"
+                                    routerLink="/cart"
+                                >
+                                    <mat-icon
+                                        [matBadge]="
+                                            cartService.getCartCount() > 0
+                                                ? cartService.getCartCount()
+                                                : null
+                                        "
+                                        >shopping_cart</mat-icon
+                                    >
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </mat-toolbar>
+            </div>
+        </header>
+    `,
     styles: [
-        `
-    @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Roboto+Flex:opsz,wght@8..144,100;8..144,200;8..144,300;8..144,400;8..144,500;8..144,600&display=swap');
-.header {
-  width: 100%;
-  height: auto;
-  border-bottom: 1px solid #e4e7eb;
-}
+        `.active{color:blue}
+            .header {
+                width: 100%;
+                position: fixed;
+                z-index: 999;
+                top: 0;
+            }
+            ::ng-deep .mat-badge-content {
+                background: rgba(0, 0, 0, 0.5);
+                color: white;
+            }
+            .main-container {
+                width: 78%;
+                margin: 0 auto;
+            }
 
-.main-container {
-  width: 78%;
-  margin: 0 auto;
-}
+            .secondary-header {
+                width: 100%;
+                background-color: #231942;
+                font-size: 14px;
+                color: #fff;
+            }
 
-.secondary-header {
-  width: 100%;
-  height: auto;
-  background-color: #00b5ad;
-  font-size: 14px;
-  color: #FFF;
-}
+            .s-h-inner {
+                width: 100%;
+                height: auto;
+                padding: 0.5rem;
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+            }
 
-.s-h-inner {
-  width: 100%;
-  height: auto;
-  padding: 0.5rem;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-}
+            .m-h-inner {
+                width: 100%;
+                height: auto;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            /* 
+            .header-location {
+                display: flex;
+                align-items: center;
+            }
 
-.m-h-inner {
-  width: 100%;
-  height: auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+            .header-location svg {
+                width: 15px;
+                fill: #fff;
+                margin-right: 0.5rem;
+            } */
 
+            ::ng-deep .mat-toolbar-row,
+            .mat-toolbar-single-row {
+                height: 88px;
+                justify-content: space-between;
+                padding: 0 !important;
+                background-color: transparent;
+            }
 
-.header-location {
-  display: flex;
-  align-items: center;
-}
+            .logo a {
+                display: block;
+                width: 100%;
+                height: 100%;
+                font-family: 'Sacramento', cursive;
+                color: white;
+                text-decoration: none;
+            }
+            .navigation button {
+                font-size: 16px;
+                font-weight: bold;
+                letter-spacing: 2px;
+            }
+            .navigation ::ng-deep .mat-button {
+                color: white;
+            }
 
-.header-location svg {
-  width: 15px;
-  fill: #FFF;
-  margin-right: 0.5rem;
-}
+            .navigation ::ng-deep .mat-button:hover {
+                color: #e0a04f;
+            }
 
-::ng-deep .mat-toolbar-row, .mat-toolbar-single-row {
-  height: 88px;
-  justify-content: space-between;
-  padding: 0!important;
-  background-color: #FFF;
-}
+            ::ng-deep .mat-button-ripple.mat-ripple {
+                display: none !important;
+            }
 
-::ng-deep .mat-button:last-child {
-  padding-right: 8px!important;
-}
+            .sticky-nav {
+                background: white !important;
+            }
 
-.logo a {
-  text-decoration: none;
-}
-
-.logo span {
-  font-family: 'Permanent Marker', cursive;
-  font-size: 28px;
-  color: #212529;
-}
-
-.navigation ::ng-deep .mat-button {
-  color: #2B2B2B;
-}
-
-.navigation ::ng-deep .mat-button:hover {
-  color: #00b5ad;
-  background-color: transparent!important;
-}
-
-::ng-deep .mat-button-ripple.mat-ripple {
-  display: none!important;
-}
-
-    `
-    ]
+            .sticky-nav .logo a,
+            .sticky-nav .navigation ::ng-deep .mat-button {
+                color: #463420;
+            }
+            .header-change {
+                background: #5f462b;
+                display: block;
+                position: relative;
+            }
+        `,
+    ],
 })
 export class HeaderComponent implements OnInit {
+    constructor(public cartService: CartService, private router: Router) { }
 
-    constructor() { }
-
-    ngOnInit(): void {
+    ngOnInit() {
+        this.routerCheck();
     }
 
+    routerCheck() {
+        this.router.events
+            .pipe(filter((event) => event instanceof NavigationEnd))
+            .subscribe(() => {
+                if (this.router.url == '/home') {
+                    let navMenu = document.querySelector('.header');
+                    navMenu?.classList.remove('header-change');
+                    window.onscroll = () => {
+                        let body = document.querySelector(
+                            'body'
+                        ) as HTMLBodyElement;
+                        if (window.pageYOffset > 600 && true) {
+                            navMenu?.classList.add('sticky-nav');
+                        } else {
+                            navMenu?.classList.remove('sticky-nav');
+                            body.style.margin = '0';
+                        }
+                    };
+                } else {
+                    let navMenu = document.querySelector('.header');
+                    navMenu?.classList.add('header-change');
+                }
+            });
+    }
 }
