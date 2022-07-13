@@ -1,30 +1,66 @@
-<div class="hero">
-  <div>
-    <iframe [src]="mapsURL | safe" width="100%" height="615px" frameborder="0">
-    </iframe>
-  </div>
+<div
+    class="min-h-screen overflow-hidden flex justify-center items-center border-red-600 p-10"
+>
+    <div class="grid grid-flow-col grid-cols-2 min-w-[900px] min-h-[500px]">
+        <!-- map is the left container with the map -->
+        <div
+            class="grid grid-flow-row justify-center bg-[#0008] bg-[url('https://www.acouplecooks.com/wp-content/uploads/2020/04/Sidecar-Cocktail-006s.jpg')] bg-no-repeat bg-cover bg-center h-full p-7 bg-blend-color"
+        >
+            <br />
 
-  <div class="right form-container">
-    <form action="" class="about-form">
-      <h3>Contact Us</h3>
-      <div class="form-name">
-        <input type="text" placeholder="First Name" />
-        <input type="text" placeholder="Last Name" />
-      </div>
-      <input type="email" placeholder="Email" />
-      <textarea
-        name="address"
-        id=""
-        cols="30"
-        rows="10"
-        placeholder="Address"
-      ></textarea>
-      <button>Submit</button>
-    </form>
-    <mat-toolbar color="primary" class="mattoolbar">
-      <h1>Amber Eateries</h1>
-      &nbsp; &nbsp; &nbsp;
-      <h2>1 305-420-6361</h2>
-    </mat-toolbar>
-  </div>
+            <div
+                class="text-white text-center text-6xl font-semibold mt-5 font-['Italiana'] font-bold"
+            >
+                <h1>We'd Love to <br />Hear From You</h1>
+            </div>
+
+            <div>
+                <br />
+                <br />
+                <br />
+                <br />
+                <h4 class="text-center text-white pb-4">Find us here</h4>
+
+                <iframe
+                    [src]="mapsURL | safe"
+                    width="370px"
+                    height="400px"
+                    frameborder="0"
+                    class="mx-auto mt-auto"
+                >
+                </iframe>
+            </div>
+        </div>
+
+        <div class="w-full">
+            <form
+                action=""
+                class="about-form grid grid-flow-row py-20 px-28 h-full"
+            >
+                <h3 class="text-[50px] text-center font-['Italiana'] font-bold"  id="contact">Contact Us</h3>
+                <mat-form-field>
+                    <mat-label>First Name</mat-label>
+                    <input type="text" name="" id="" matInput>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Last Name</mat-label>
+                    <input type="text" name="" id="" matInput>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Email</mat-label>
+                    <input type="text" name="" id="" matInput>
+                </mat-form-field>     
+                <mat-form-field class="example-full-width">
+                    <mat-label>Leave a comment</mat-label>
+                    <textarea matInput placeholder="C30"></textarea>
+                  </mat-form-field>
+                <br />
+                <button
+                    class="font-['Italiana'] font-bold text-4xl tracking-[.2em] bg-[#5F462B] text-white p-4"
+                 >
+                    Submit
+                </button>
+            </form>
+        </div>
+    </div>
 </div>
